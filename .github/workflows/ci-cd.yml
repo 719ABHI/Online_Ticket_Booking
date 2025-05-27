@@ -36,7 +36,7 @@ jobs:
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/online-ticket-booking:latest
 
-      - name: Deploy to Server via SSH
+      - name: Deploy to EC2 Server via SSH
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -44,7 +44,20 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/online-ticket-booking:latest
-            docker stop online-ticket-booking || true
-            docker rm online-ticket-booking || true
-            docker run -d --name online-ticket-booking -p 3003:3003 ${{ secrets.DOCKER_USERNAME }}/online-ticket-booking:latest
+            if ! command -v docker &> /dev/null
+            then
+              echo "Docker not found. Installing..."
+              sudo yum update -y
+              sudo yum install docker -y
+              sudo service docker start
+              sudo usermod -aG docker $USER
+            else
+              echo "Docker is already installed."
+              sudo service docker start
+            fi
+
+            echo "Deploying Docker container..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/online-ticket-booking:latest
+            sudo docker stop online-ticket-booking || true
+            sudo docker rm online-ticket-booking || true
+            sudo docker run -d --name online-ticket-booking -p 3003:3003 ${{ secrets.DOCKER_USERNAME }}/online-ticket-booking:latest
