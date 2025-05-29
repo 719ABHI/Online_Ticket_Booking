@@ -586,7 +586,9 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
 // MongoDB connection (adjust your URI accordingly)
-const dbURI = 'mongodb://host.docker.internal:27017/trainbooking'; // or your real connection string
+const dbURI = 'mongodb://host.docker.internal:27017/trainbooking'; // or your real connection strin
+//const dbURI = 'mongodb://localhost:27017/trainbooking'; // or your real connection string
+//>>>>>>> 0d124de4d4db55bfc7b99e36cbb0cc5312c84f05
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
     .catch((err) => console.log('MongoDB connection error:', err));
@@ -776,7 +778,7 @@ app.get('/api/hello', (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
+app.listen(port,'0.0.0.0', () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
 
