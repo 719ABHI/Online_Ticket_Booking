@@ -586,7 +586,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
 // MongoDB connection (adjust your URI accordingly)
-const dbURI = 'mongodb://host.docker.internal:27017/yourdbname'; // or your real connection string
+const dbURI = 'mongodb://host.docker.internal:27017/trainbooking'; // or your real connection string
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
     .catch((err) => console.log('MongoDB connection error:', err));
