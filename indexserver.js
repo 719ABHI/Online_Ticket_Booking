@@ -589,7 +589,7 @@ app.use(express.static(path.join(__dirname)));
 //const dbURI = 'mongodb://host.docker.internal:27017/trainbooking'; // or your real connection strin
 //const dbURI = 'mongodb://localhost:27017/trainbooking'; // or your real connection string
 
-const dbURI = 'mongodb://localhost:27017/trainbooking';
+const dbURI = "mongodb://mongodb:27017/trainbooking"; // Use this for Docker setup, replace with your actual MongoDB URI if needed
 
 //>>>>>>> 0d124de4d4db55bfc7b99e36cbb0cc5312c84f05
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
