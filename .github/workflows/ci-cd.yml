@@ -18,14 +18,23 @@ jobs:
         echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    - name: Deploy over SSH
+    - name: Deploy to EC2
       run: |
-        ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          # Ensure GitHub host key is known (again for EC2 shell)
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+          # Clone repo if not exists, else pull latest
           cd trainbooking || git clone git@github.com:719ABHI/Online_Ticket_Booking.git trainbooking && cd trainbooking
           git pull origin main
-          docker stop trainbooking-container || true
-          docker rm trainbooking-container || true
-          docker build -t trainbooking-app .
-          docker run -d -p 3003:3003 --name trainbooking-container trainbooking-app
+
+          # Stop and remove existing Docker container if running
+          sudo docker stop trainbooking-container || true
+          sudo docker rm trainbooking-container || true
+
+          # Build Docker image and run new container
+          sudo docker build -t trainbooking-app .
+          sudo docker run -d -p 3003:3003 --name trainbooking-container trainbooking-app
         EOF
