@@ -22,7 +22,7 @@ jobs:
     - name: Deploy over SSH
       run: |
         ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          cd trainbooking || git clone https://github.com/<your-username>/<your-repo>.git trainbooking && cd trainbooking
+          cd trainbooking || git clone https://github.com/719ABHI/Online_Ticket_Booking.git.git trainbooking && cd trainbooking
           git pull origin main
           docker stop trainbooking-container || true
           docker rm trainbooking-container || true
