@@ -8,253 +8,50 @@
     <link rel="stylesheet" href="styles.css" />
     <style>
         /* ... your existing CSS ... */
-        /* No changes in styles for this update */
-        /* General Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            background-color: #f0f4f8;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        h1 {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #3b8b18;
-            text-shadow: -1px 1px 2px #d9d9d9;
-            margin-bottom: 20px;
-        }
-        .train-search {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .train-search input {
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 200px;
-        }
-        .train-search button {
-            background-color: #8b1818;
-            color: white;
-            padding: 10px 20px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .train-search button:hover {
-            background-color: #2a9d8f;
-        }
-        .train-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .train-item {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .train-item:hover {
-            transform: scale(1.05);
-        }
-        .seat-selection {
-            display: flex;
-            flex-direction: row;
-            gap: 30px;
-            max-width: 800px;
-            width: 100%;
-            margin-top: 20px;
-        }
-        .booked{
-            background-color: #1e6827;
-            color: white;
-        }
-        .seats-box, .summary-box {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .seat.booked {
-            background-color: #ff4d4d;
-            color: white;
-            cursor: not-allowed;
-        }
-        .seat:hover:not(.booked) {
-            transform: scale(1.1);
-        }
-        .seats-box {
-            flex: 2;
-            width: 100%;
-        }
-        .seat-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .seat {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .lower-berth {
-            background-color: #ff8b94;
-        }
-        .middle-berth {
-            background-color: #a8e6cf;
-        }
-        .upper-berth {
-            background-color: #ffd54f;
-        }
-        .side-lower-berth {
-            background-color: #9fa8da;
-        }
-        .side-upper-berth {
-            background-color: #d1c4e9;
-        }
-        .seat:hover {
-            transform: scale(1.1);
-        }
-        .summary-box {
-            flex: 1;
-            text-align: center;
-        }
-        .proceed-button {
-            background-color: #3b8b18;
-            color: white;
-            padding: 15px 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-            width: 100%;
-            transition: background-color 0.3s;
-        }
-        .proceed-button:hover {
-            background-color: #2a9d8f;
-        }
-        .section-title {
-            font-size: 1.8rem;
-            color: #3b8b18;
-            margin-top: 30px;
-            text-align: center;
-        }
-        .history-container, .admin-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: 20px auto;
-        }
-        .booking-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-        }
-        .cancel-button {
-            background-color: #e57373;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .cancel-button:hover {
-            background-color: #ef5350;
-        }
-        .generate-report-button {
-            background-color: #3b8b18;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .container{
-            height: 100%;
-        }
-        .cancellation {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .cancellation input {
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-right: 10px;
-        }
-        .cancellation button {
-            background-color: #e57373;
-            color: white;
-            padding: 10px 20px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .cancellation button:hover {
-            background-color: #ef5350;
-        }
-        /* Added for displaying entered details */
-        .entered-details {
-            background: #e8f5e9;
-            border-radius: 8px;
-            padding: 12px 24px;
-            margin-bottom: 18px;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 0 2px 6px #e0e0e0;
-        }
-        .entered-details ul {
-            list-style: none;
-        }
-        .entered-details li {
-            margin-bottom: 4px;
-        }
-        /* Added for summary details */
-        .summary-details {
-            text-align: left;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            font-size: 1rem;
-        }
-        .summary-details hr {
-            margin: 6px 0;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { display: flex; flex-direction: column; min-height: 100vh; background-color: #f0f4f8; }
+        .container { display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        h1 { font-size: 2rem; font-weight: bold; color: #3b8b18; text-shadow: -1px 1px 2px #d9d9d9; margin-bottom: 20px; }
+        .train-search { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+        .train-search input { padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px; width: 200px; }
+        .train-search button { background-color: #8b1818; color: white; padding: 10px 20px; font-size: 1rem; border: none; border-radius: 5px; cursor: pointer; }
+        .train-search button:hover { background-color: #2a9d8f; }
+        .train-list { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
+        .train-item { background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); cursor: pointer; transition: transform 0.2s; }
+        .train-item:hover { transform: scale(1.05); }
+        .seat-selection { display: flex; flex-direction: row; gap: 30px; max-width: 800px; width: 100%; margin-top: 20px; }
+        .booked{ background-color: #1e6827; color: white; }
+        .seats-box, .summary-box { background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        .seat.booked { background-color: #ff4d4d; color: white; cursor: not-allowed; }
+        .seat:hover:not(.booked) { transform: scale(1.1); }
+        .seats-box { flex: 2; width: 100%; }
+        .seat-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        .seat { width: 50px; height: 50px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; transition: transform 0.2s; }
+        .lower-berth { background-color: #ff8b94; }
+        .middle-berth { background-color: #a8e6cf; }
+        .upper-berth { background-color: #ffd54f; }
+        .side-lower-berth { background-color: #9fa8da; }
+        .side-upper-berth { background-color: #d1c4e9; }
+        .seat:hover { transform: scale(1.1); }
+        .summary-box { flex: 1; text-align: center; }
+        .proceed-button { background-color: #3b8b18; color: white; padding: 15px 20px; font-size: 1rem; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; margin-top: 15px; width: 100%; transition: background-color 0.3s; }
+        .proceed-button:hover { background-color: #2a9d8f; }
+        .section-title { font-size: 1.8rem; color: #3b8b18; margin-top: 30px; text-align: center; }
+        .history-container, .admin-container { background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); max-width: 800px; margin: 20px auto; }
+        .booking-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #ccc; }
+        .cancel-button { background-color: #e57373; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; }
+        .cancel-button:hover { background-color: #ef5350; }
+        .generate-report-button { background-color: #3b8b18; color: white; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .container{ height: 100%; }
+        .cancellation { margin-top: 20px; text-align: center; }
+        .cancellation input { padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px; margin-right: 10px; }
+        .cancellation button { background-color: #e57373; color: white; padding: 10px 20px; font-size: 1rem; border: none; border-radius: 5px; cursor: pointer; }
+        .cancellation button:hover { background-color: #ef5350; }
+        .entered-details { background: #e8f5e9; border-radius: 8px; padding: 12px 24px; margin-bottom: 18px; width: 100%; max-width: 450px; box-shadow: 0 2px 6px #e0e0e0; }
+        .entered-details ul { list-style: none; }
+        .entered-details li { margin-bottom: 4px; }
+        .summary-details { text-align: left; margin-top: 10px; margin-bottom: 10px; font-size: 1rem; }
+        .summary-details hr { margin: 6px 0; }
     </style>
 </head>
 <body>
@@ -268,6 +65,7 @@
             <label for="date" style="display:none;">Travel Date</label>
             <input type="date" id="date" title="Select travel date" placeholder="Select date" />
             <button onclick="searchTrains()">Search Trains</button>
+            <button onclick="fetchAllTrains()" style="background:#3b8b18;margin-left:10px;">Show All Trains</button>
         </div>
 
         <!-- Display entered details -->
@@ -283,7 +81,6 @@
         <!-- Train List (Dynamically populated after search) -->
         <div class="train-list" id="train-list"></div>
 
-        <!-- Seat Selection Section -->
         <div class="seat-selection" id="seat-selection" style="display: none;">
             <div class="seats-box" id="seats-box"></div>
             <div class="summary-box">
@@ -307,14 +104,12 @@
             </div>
         </div>
      
-        <!-- Booking History Section -->
         <h2 class="section-title">Booking History and Details</h2>
         <div class="history-container" id="booking-history">
             <button onclick="displayBookingHistory()">View Booking History</button>
             <div id="booking-list"></div>
         </div>
 
-        <!-- Admin Reports Section (visible to admin only) -->
         <h2 class="section-title" id="admin-title" style="display: none;">Admin Reports and Analytics</h2>
         <div class="admin-container" id="admin-container" style="display: none;">
             <button class="generate-report-button" onclick="generateReport()">Generate Ticket Sales Report</button>
@@ -327,14 +122,14 @@
         let trainSeats = [];
         const userEmail = localStorage.getItem("userEmail");
 
-        // Helper: Show entered details on the page
+        // Show entered details on the page
         function showEnteredDetails(from, to, date) {
             document.getElementById("entered-details").style.display = "block";
             document.getElementById("detail-from").textContent = from;
             document.getElementById("detail-to").textContent = to;
             document.getElementById("detail-date").textContent = date;
         }
-        // Helper: Show details in summary box when train is selected
+        // Show details in summary box when train is selected
         function showSummaryDetails(from, to, date, train) {
             document.getElementById("summary-from").textContent = from;
             document.getElementById("summary-to").textContent = to;
@@ -342,17 +137,35 @@
             document.getElementById("summary-train").textContent = train;
         }
 
-        // Function to search for trains
+        // Show all trains on load
+        window.onload = function() {
+            fetchAllTrains();
+        };
+        function fetchAllTrains() {
+            document.getElementById("entered-details").style.display = "none";
+            fetch('http://ec2-3-110-42-206.ap-south-1.compute.amazonaws.com:3003/api/allTrains')
+                .then(response => response.json())
+                .then(data => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        displayTrains(data);
+                    } else {
+                        document.getElementById("train-list").innerHTML = "<p>No trains found.</p>";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching all trains:", error);
+                    document.getElementById("train-list").innerHTML = "<p>Error fetching train data.</p>";
+                });
+        }
+
         function searchTrains() {
             const from = document.getElementById("from").value;
             const to = document.getElementById("to").value;
             const date = document.getElementById("date").value;
-            // Validate inputs
             if (!from || !to || !date) {
                 alert("Please fill in all fields.");
                 return;
             }
-            // Get today's date
             const today = new Date();
             today.setHours(0, 0, 0, 0);
             const selectedDate = new Date(date);
@@ -360,31 +173,27 @@
                 alert("Please select a present or future date.");
                 return;
             }
-            // Store search data in localStorage for later use
             localStorage.setItem("fromStation", from);
             localStorage.setItem("toStation", to);
             localStorage.setItem("travelDate", date);
 
-            // Show entered details on the page
             showEnteredDetails(from, to, date);
 
-            // Send API request to fetch train details (replace with your backend DNS if needed)
             fetch(`http://ec2-3-110-42-206.ap-south-1.compute.amazonaws.com:3003/api/searchTrains?from=${from}&to=${to}&date=${date}`)
                 .then(response => response.json())
                 .then(data => {
                     if (Array.isArray(data) && data.length > 0) {
                         displayTrains(data);
                     } else {
-                        alert("No trains found for the given route.");
+                        document.getElementById("train-list").innerHTML = "<p>No trains found for the given route.</p>";
                     }
                 })
                 .catch(error => {
                     console.error("Error fetching train data:", error);
-                    alert("Something went wrong while fetching the train data.");
+                    document.getElementById("train-list").innerHTML = "<p>Error fetching train data.</p>";
                 });
         }
 
-        // Function to display trains on the page
         function displayTrains(trains) {
             const trainList = document.getElementById("train-list");
             trainList.innerHTML = '';
@@ -397,14 +206,11 @@
             });
         }
 
-        // Function to select a train
         function selectTrain(train) {
             selectedTrain = train;
             document.getElementById("seat-selection").style.display = "flex";
             generateSeatLayout(train.availableSeats, train.bookedSeats || []);
-            if (!train.bookedSeats) {
-                train.bookedSeats = [];
-            }
+            if (!train.bookedSeats) train.bookedSeats = [];
             document.querySelectorAll(".seat").forEach((seatElement, index) => {
                 seatElement.addEventListener("click", function () {
                     const seatIndex = index.toString();
@@ -420,7 +226,6 @@
                 });
             });
 
-            // Show details in summary
             const from = localStorage.getItem("fromStation");
             const to = localStorage.getItem("toStation");
             const date = localStorage.getItem("travelDate");
@@ -428,32 +233,23 @@
             localStorage.setItem("trainTime", train.timing);
         }
 
-        // Function to update booked seats in the database
         async function updateBookedSeatsInDatabase(trainId, bookedSeats) {
-            if (!selectedTrain) {
-                console.error("No train selected.");
-                return;
-            }
+            if (!selectedTrain) return;
             const requestData = {
                 trainId: trainId,
                 seats: bookedSeats.map(seat => parseInt(seat, 10)),
             };
             try {
-                const response = await fetch(`http://ec2-3-110-42-206.ap-south-1.compute.amazonaws.com:3003/api/updateBookedSeats`, {
+                await fetch(`http://ec2-3-110-42-206.ap-south-1.compute.amazonaws.com:3003/api/updateBookedSeats`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(requestData),
                 });
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(errorText);
-                }
             } catch (error) {
                 console.error("Error updating booked seats:", error);
             }
         }
 
-        // Function to generate seat layout
         function generateSeatLayout(totalSeats, bookedSeats) {
             const seatsBox = document.getElementById("seats-box");
             seatsBox.innerHTML = '';
@@ -589,9 +385,7 @@
         }
 
         function fun1() {
-            // Get the img element by its ID
             const imgElement = document.getElementById("img");
-            // Set the src attribute to generate the QR code
             imgElement.src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + encodeURIComponent('Hi');
         }
     </script>
