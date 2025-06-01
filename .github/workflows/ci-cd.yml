@@ -19,13 +19,18 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-    - name: Deploy over SSH
+    - name: Deploy to EC2
       run: |
-        ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          cd trainbooking || git clone https://github.com/719ABHI/Online_Ticket_Booking.git.git trainbooking && cd trainbooking
+        ssh -t ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          set -e
+          if [ ! -d "trainbooking" ]; then
+            git clone https://github.com/719ABHI/Online_Ticket_Booking.git trainbooking
+          fi
+          cd trainbooking
           git pull origin main
-          docker stop trainbooking-container || true
-          docker rm trainbooking-container || true
-          docker build -t trainbooking-app .
-          docker run -d -p 3003:3003 --name trainbooking-container trainbooking-app
+
+          sudo docker stop trainbooking-container || true
+          sudo docker rm trainbooking-container || true
+          sudo docker build -t trainbooking-app .
+          sudo docker run -d -p 3003:3003 --name trainbooking-container trainbooking-app
         EOF
