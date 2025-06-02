@@ -21,27 +21,40 @@ jobs:
 
     - name: Deploy to EC2
       run: |
-        ssh -t ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -t ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
           set -e
+          # Clean up docker resources to prevent disk full errors
+          sudo docker system prune -af || true
+          sudo docker volume prune -f || true
+          sudo docker builder prune -af || true
+
           # Clone repo if not exists, else pull latest
           if [ ! -d "trainbooking" ]; then
             git clone https://github.com/719ABHI/Online_Ticket_Booking.git trainbooking
           fi
           cd trainbooking
           git pull origin main
+
           # Create Docker network if not exists
           if ! sudo docker network ls | grep -q trainbooking-net; then
             sudo docker network create trainbooking-net
           fi
+
           # Stop and remove existing containers if any
           sudo docker stop trainbooking-container || true
           sudo docker rm trainbooking-container || true
           sudo docker stop mongodb || true
           sudo docker rm mongodb || true
+
+          # Remove dangling images to free up space
+          sudo docker image prune -af || true
+
           # Run MongoDB container on network
           sudo docker run -d --name mongodb --network trainbooking-net -p 27017:27017 mongo
+
           # Build backend Docker image
           sudo docker build -t trainbooking-app .
+
           # Run backend container on same network
           sudo docker run -d --name trainbooking-container --network trainbooking-net -p 3003:3003 trainbooking-app
         EOF
