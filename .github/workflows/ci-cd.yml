@@ -193,71 +193,73 @@
 #     #     ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
 #     #       "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
 
-#     - name: Deploy to EC2
-#       env:
-#         EC2_USER: ${{ secrets.EC2_USER }}
-#         EC2_HOST: ${{ secrets.EC2_HOST }}
-#       run: |
-#         ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
-#           set -e
-#           # Clone repo if not exists, else pull latest
-#           if [ ! -d "trainbooking" ]; then
-#             git clone https://github.com/719ABHI/Online_Ticket_Booking.git trainbooking
-#           fi
-#           cd trainbooking
-#           git pull origin main
-#           # Create Docker network if not exists
-#           if ! sudo docker network ls | grep -q trainbooking-net; then
-#             sudo docker network create trainbooking-net
-#           fi
-#           # Stop and remove existing containers if any
-#           sudo docker stop trainbooking-container || true
-#           sudo docker rm trainbooking-container || true
-#           sudo docker stop mongodb || true
-#           sudo docker rm mongodb || true
-#           # Run MongoDB container on network
-#           sudo docker run -d --name mongodb --network trainbooking-net -p 27017:27017 mongo
-#           # Build backend Docker image
-#           sudo docker build -t trainbooking-app .
-#           # Run backend container on same network
-#           sudo docker run -d --name trainbooking-container --network trainbooking-net -p 3003:3003 trainbooking-app
-#         EOF
-
-
-
-
-
-
-name: Deploy to EC2
-
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Setup SSH
+    - name: Deploy to EC2
       env:
-        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        EC2_USER: ${{ secrets.EC2_USER }}
         EC2_HOST: ${{ secrets.EC2_HOST }}
       run: |
-        set -e
-        if [ -z "$EC2_SSH_KEY" ] || [ -z "$EC2_HOST" ]; then
-          echo "EC2_SSH_KEY or EC2_HOST is not set"
-          exit 1
-        fi
-        mkdir -p ~/.ssh
-        # Store SSH key with correct line breaks
-        echo -e "$EC2_SSH_KEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        # Add EC2 host to known_hosts
-        ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+        ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
+          set -e
+          # Clone repo if not exists, else pull latest
+          if [ ! -d "trainbooking" ]; then
+            git clone https://github.com/719ABHI/Online_Ticket_Booking.git trainbooking
+          fi
+          cd trainbooking
+          git pull origin main
+          # Create Docker network if not exists
+          if ! sudo docker network ls | grep -q trainbooking-net; then
+            sudo docker network create trainbooking-net
+          fi
+          # Stop and remove existing containers if any
+          sudo docker stop trainbooking-container || true
+          sudo docker rm trainbooking-container || true
+          sudo docker stop mongodb || true
+          sudo docker rm mongodb || true
+          # Run MongoDB container on network
+          sudo docker run -d --name mongodb --network trainbooking-net -p 27017:27017 mongo
+          # Build backend Docker image
+          sudo docker build -t trainbooking-app .
+          # Run backend container on same network
+          sudo docker run -d --name trainbooking-container --network trainbooking-net -p 3003:3003 trainbooking-app
+        EOF
+
+
+
+
+
+
+# name: Deploy to EC2
+
+# on:
+#   push:
+#     branches: [ main ]
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v3
+
+#     - name: Setup SSH
+#       env:
+#         EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+#         EC2_HOST: ${{ secrets.EC2_HOST }}
+#       run: |
+#         set -e
+#         if [ -z "$EC2_SSH_KEY" ] || [ -z "$EC2_HOST" ]; then
+#           echo "EC2_SSH_KEY or EC2_HOST is not set"
+#           exit 1
+#         fi
+#         mkdir -p ~/.ssh
+#         # Store SSH key with correct line breaks
+#         echo -e "$EC2_SSH_KEY" > ~/.ssh/id_rsa
+#         chmod 600 ~/.ssh/id_rsa
+#         # Add EC2 host to known_hosts
+#         ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+
 
     # Optional: Install Docker on EC2 if it's not already present
     # - name: Install Docker on EC2
@@ -268,44 +270,44 @@ jobs:
     #     ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST \
     #       "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
 
-    - name: Deploy to EC2
-      env:
-        EC2_USER: ${{ secrets.EC2_USER }}
-        EC2_HOST: ${{ secrets.EC2_HOST }}
-      run: |
-        set -e
-        if [ -z "$EC2_USER" ] || [ -z "$EC2_HOST" ]; then
-          echo "EC2_USER or EC2_HOST is not set"
-          exit 1
-        fi
-        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
-          set -e
-          # Clone repo if not exists, else pull latest
-          if [ ! -d "trainbooking" ]; then
-            git clone https://github.com/719ABHI/Online_Ticket_Booking.git trainbooking
-          fi
-          cd trainbooking
-          git pull origin main
+    # - name: Deploy to EC2
+    #   env:
+    #     EC2_USER: ${{ secrets.EC2_USER }}
+    #     EC2_HOST: ${{ secrets.EC2_HOST }}
+    #   run: |
+    #     set -e
+    #     if [ -z "$EC2_USER" ] || [ -z "$EC2_HOST" ]; then
+    #       echo "EC2_USER or EC2_HOST is not set"
+    #       exit 1
+    #     fi
+    #     ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
+    #       set -e
+    #       # Clone repo if not exists, else pull latest
+    #       if [ ! -d "trainbooking" ]; then
+    #         git clone https://github.com/719ABHI/Online_Ticket_Booking.git trainbooking
+    #       fi
+    #       cd trainbooking
+    #       git pull origin main
 
-          # Create Docker network if not exists
-          if ! sudo docker network ls | grep -q trainbooking-net; then
-            sudo docker network create trainbooking-net
-          fi
+    #       # Create Docker network if not exists
+    #       if ! sudo docker network ls | grep -q trainbooking-net; then
+    #         sudo docker network create trainbooking-net
+    #       fi
 
-          # Stop and remove existing containers if any
-          sudo docker stop trainbooking-container || true
-          sudo docker rm trainbooking-container || true
-          sudo docker stop mongodb || true
-          sudo docker rm mongodb || true
+    #       # Stop and remove existing containers if any
+    #       sudo docker stop trainbooking-container || true
+    #       sudo docker rm trainbooking-container || true
+    #       sudo docker stop mongodb || true
+    #       sudo docker rm mongodb || true
 
-          # Run MongoDB container on network
-          if ! sudo docker ps -a --format '{{.Names}}' | grep -wq mongodb; then
-            sudo docker run -d --name mongodb --network trainbooking-net -p 27017:27017 mongo
-          fi
+    #       # Run MongoDB container on network
+    #       if ! sudo docker ps -a --format '{{.Names}}' | grep -wq mongodb; then
+    #         sudo docker run -d --name mongodb --network trainbooking-net -p 27017:27017 mongo
+    #       fi
 
-          # Build backend Docker image
-          sudo docker build -t trainbooking-app .
+    #       # Build backend Docker image
+    #       sudo docker build -t trainbooking-app .
 
-          # Run backend container on same network
-          sudo docker run -d --name trainbooking-container --network trainbooking-net -p 3003:3003 trainbooking-app
-        EOF
+    #       # Run backend container on same network
+    #       sudo docker run -d --name trainbooking-container --network trainbooking-net -p 3003:3003 trainbooking-app
+    #     EOF
