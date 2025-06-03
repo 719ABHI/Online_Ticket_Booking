@@ -143,7 +143,7 @@
         };
         function fetchAllTrains() {
             document.getElementById("entered-details").style.display = "none";
-            fetch('http://ec2-52-66-235-148.ap-south-1.compute.amazonaws.com:3003/api/allTrains')
+            fetch('http://ec2-13-201-23-158.ap-south-1.compute.amazonaws.com:3003/api/allTrains')
                 .then(response => response.json())
                 .then(data => {
                     if (Array.isArray(data) && data.length > 0) {
@@ -179,7 +179,7 @@
 
             showEnteredDetails(from, to, date);
 
-            fetch(`http://ec2-52-66-235-148.ap-south-1.compute.amazonaws.com/api/searchTrains?from=${from}&to=${to}&date=${date}`)
+            fetch(`http://ec2-13-201-23-158.ap-south-1.compute.amazonaws.com/api/searchTrains?from=${from}&to=${to}&date=${date}`)
                 .then(response => response.json())
                 .then(data => {
                     if (Array.isArray(data) && data.length > 0) {
@@ -240,7 +240,7 @@
                 seats: bookedSeats.map(seat => parseInt(seat, 10)),
             };
             try {
-                await fetch(`http://ec2-52-66-235-148.ap-south-1.compute.amazonaws.com:3003/api/updateBookedSeats`, {
+                await fetch(`http://ec2-13-201-23-158.ap-south-1.compute.amazonaws.com:3003/api/updateBookedSeats`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(requestData),
