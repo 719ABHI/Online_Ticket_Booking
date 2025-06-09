@@ -270,336 +270,294 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Select Your Seats</h1>
+  <div class="container">
+    <h1>Select Your Seats</h1>
 
-        <!-- Train Search Form -->
-        <div class="train-search">
-            <input type="text" id="from" placeholder="From" />
-            <input type="text" id="to" placeholder="To" />
-            <label for="date" style="display:none;">Travel Date</label>
-            <input type="date" id="date" title="Select travel date" placeholder="Select date" />
-            <button onclick="searchTrains()">Search Trains</button>
-        </div>
-
-        <div class="train-list" id="train-list"></div>
-
-        <div class="seat-selection" id="seat-selection" style="display: none;">
-            <div class="seats-box" id="seats-box"></div>
-            <div class="summary-box">
-                <h2>Booking Summary</h2>
-                <p>Selected Seats: <span id="selected-seats-list">None</span></p>
-                <p>Total Amount: $<span id="total-amount">0</span></p>
-                <p>Booking ID: <span id="booking-id">None</span></p>
-                <div class="box">
-                    <img src="" id="img">
-                </div>
-                <button onclick="fun1()">Generate</button>
-                <button class="proceed-button" onclick="proceedToPayment()">Proceed with Payment</button>
-            </div>
-        </div>
-
-        <h2 class="section-title">Booking History and Details</h2>
-        <div class="history-container" id="booking-history">
-            <button onclick="displayBookingHistory()">View Booking History</button>
-            <div id="booking-list"></div>
-        </div>
-
-        <h2 class="section-title" id="admin-title" style="display: none;">Admin Reports and Analytics</h2>
-        <div class="admin-container" id="admin-container" style="display: none;">
-            <button class="generate-report-button" onclick="generateReport()">Generate Ticket Sales Report</button>
-            <div id="report-output"></div>
-        </div>
+    <!-- Train Search Form -->
+    <div class="train-search">
+      <input type="text" id="from" placeholder="From" />
+      <input type="text" id="to" placeholder="To" />
+      <label for="date" style="display: none;">Travel Date</label>
+      <input type="date" id="date" title="Select travel date" placeholder="Select date" />
+      <button onclick="searchTrains()">Search Trains</button>
     </div>
 
-    <script>
-        const API_BASE_URL = "http://ec2-35-154-239-29.ap-south-1.compute.amazonaws.com:3003/api";
-        let selectedTrain = null;
-        let trainSeats = [];
+    <div class="train-list" id="train-list"></div>
 
-        const userEmail = localStorage.getItem("userEmail");
+    <div class="seat-selection" id="seat-selection" style="display: none;">
+      <div class="seats-box" id="seats-box"></div>
+      <div class="summary-box">
+        <h2>Booking Summary</h2>
+        <p>Selected Seats: <span id="selected-seats-list">None</span></p>
+        <p>Total Amount: $<span id="total-amount">0</span></p>
+        <p>Booking ID: <span id="booking-id">None</span></p>
+        <div class="box">
+          <img src="" id="img">
+        </div>
+        <button onclick="fun1()">Generate</button>
+        <button class="proceed-button" onclick="proceedToPayment()">Proceed with Payment</button>
+      </div>
+    </div>
 
-        function searchTrains() {
-            const from = document.getElementById("from").value;
-            const to = document.getElementById("to").value;
-            const date = document.getElementById("date").value;
+    <h2 class="section-title">Booking History and Details</h2>
+    <div class="history-container" id="booking-history">
+      <button onclick="displayBookingHistory()">View Booking History</button>
+      <div id="booking-list"></div>
+    </div>
 
-            if (!from || !to || !date) {
-                alert("Please fill in all fields.");
-                return;
-            }
+    <h2 class="section-title" id="admin-title" style="display: none;">Admin Reports and Analytics</h2>
+    <div class="admin-container" id="admin-container" style="display: none;">
+      <button class="generate-report-button" onclick="generateReport()">Generate Ticket Sales Report</button>
+      <div id="report-output"></div>
+    </div>
+  </div>
 
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const selectedDate = new Date(date);
-            if (selectedDate < today) {
-                alert("Please select a present or future date.");
-                return;
-            }
+  <script>
+    const API_BASE_URL = "http://ec2-35-154-239-29.ap-south-1.compute.amazonaws.com:3003/api";
+    let selectedTrain = null;
+    let trainSeats = [];
 
-            localStorage.setItem("fromStation", from);
-            localStorage.setItem("toStation", to);
-            localStorage.setItem("travelDate", date);
+    const userEmail = localStorage.getItem("userEmail");
 
-            fetch(`${API_BASE_URL}/searchTrains?from=${from}&to=${to}&date=${date}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (Array.isArray(data) && data.length > 0) {
-                        displayTrains(data);
-                    } else {
-                        alert("No trains found for the given route.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error fetching train data:", error);
-                    alert("Something went wrong while fetching the train data.");
-                });
+    function searchTrains() {
+      const from = document.getElementById("from").value;
+      const to = document.getElementById("to").value;
+      const date = document.getElementById("date").value;
+
+      if (!from || !to || !date) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const selectedDate = new Date(date);
+      if (selectedDate < today) {
+        alert("Please select a present or future date.");
+        return;
+      }
+
+      localStorage.setItem("fromStation", from);
+      localStorage.setItem("toStation", to);
+      localStorage.setItem("travelDate", date);
+
+      fetch(`${API_BASE_URL}/searchTrains?from=${from}&to=${to}&date=${date}`)
+        .then(response => response.json())
+        .then(data => {
+          if (Array.isArray(data) && data.length > 0) {
+            displayTrains(data);
+          } else {
+            alert("No trains found for the given route.");
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching train data:", error);
+          alert("Something went wrong while fetching the train data.");
+        });
+    }
+
+    function displayTrains(trains) {
+      const trainList = document.getElementById("train-list");
+      trainList.innerHTML = '';
+
+      trains.forEach(train => {
+        const trainItem = document.createElement("div");
+        trainItem.classList.add("train-item");
+        trainItem.textContent = `${train.trainName} - Available Seats: ${train.seatsAvailable}, Timing: ${train.departureTime} to ${train.arrivalTime}`;
+        trainItem.onclick = () => selectTrain(train);
+        trainList.appendChild(trainItem);
+      });
+    }
+
+    function selectTrain(train) {
+      selectedTrain = train;
+      document.getElementById("seat-selection").style.display = "flex";
+      generateSeatLayout(train.seatsAvailable, train.bookedSeats || []);
+
+      if (!train.bookedSeats) train.bookedSeats = [];
+
+      document.querySelectorAll(".seat").forEach((seatElement, index) => {
+        seatElement.addEventListener("click", function () {
+          const seatIndex = index.toString();
+          const isAlreadyBooked = train.bookedSeats.includes(seatIndex);
+
+          if (!isAlreadyBooked) {
+            train.bookedSeats.push(seatIndex);
+            seatElement.classList.add("booked");
+          } else {
+            train.bookedSeats = train.bookedSeats.filter(seat => seat !== seatIndex);
+            seatElement.classList.remove("booked");
+          }
+
+          updateBookedSeatsInDatabase(selectedTrain._id, train.bookedSeats);
+        });
+      });
+
+      localStorage.setItem("trainTime", `${train.departureTime} to ${train.arrivalTime}`);
+    }
+
+    async function updateBookedSeatsInDatabase(trainId, bookedSeats) {
+      const requestData = {
+        trainId: trainId,
+        seats: bookedSeats.map(seat => parseInt(seat, 10))
+      };
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/updateBookedSeats`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(requestData),
+        });
+
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          console.error("Failed to update booked seats:", data.message);
         }
+      } catch (error) {
+        console.error("Error updating booked seats:", error);
+      }
+    }
 
-        function displayTrains(trains) {
-            const trainList = document.getElementById("train-list");
-            trainList.innerHTML = '';
+    function generateSeatLayout(totalSeats, bookedSeats) {
+      const seatsBox = document.getElementById("seats-box");
+      seatsBox.innerHTML = '';
+      trainSeats = Array(totalSeats).fill(false);
 
-            trains.forEach(train => {
-                const trainItem = document.createElement("div");
-                trainItem.classList.add("train-item");
-                trainItem.textContent = `${train.name} - Available Seats: ${train.availableSeats}, Timing: ${train.timing}`;
-                trainItem.onclick = () => selectTrain(train);
-                trainList.appendChild(trainItem);
-            });
-        }
+      const columns = 4;
+      const rows = Math.ceil(totalSeats / columns);
 
-        function selectTrain(train) {
-            selectedTrain = train;
-            document.getElementById("seat-selection").style.display = "flex";
-            generateSeatLayout(train.availableSeats, train.bookedSeats || []);
+      for (let i = 0; i < rows; i++) {
+        const rowDiv = document.createElement("div");
+        rowDiv.classList.add("seat-row");
 
-            if (!train.bookedSeats) {
-                train.bookedSeats = [];
-            }
+        for (let j = 0; j < columns; j++) {
+          const seatIndex = i * columns + j;
+          if (seatIndex < totalSeats) {
+            const seat = document.createElement("div");
+            seat.classList.add("seat", getBerthType(seatIndex));
+            seat.textContent = seatIndex + 1;
 
-            document.querySelectorAll(".seat").forEach((seatElement, index) => {
-                seatElement.addEventListener("click", function () {
-                    const seatIndex = index.toString();
-                    const isAlreadyBooked = train.bookedSeats.includes(seatIndex);
-
-                    if (!isAlreadyBooked) {
-                        train.bookedSeats.push(seatIndex);
-                        seatElement.classList.add("booked");
-                    } else {
-                        train.bookedSeats = train.bookedSeats.filter(seat => seat !== seatIndex);
-                        seatElement.classList.remove("booked");
-                    }
-
-                    updateBookedSeatsInDatabase(selectedTrain._id, train.bookedSeats);
-                });
-            });
-
-            localStorage.setItem("trainTime", train.timing);
-        }
-
-        async function updateBookedSeatsInDatabase(trainId, bookedSeats) {
-            if (!selectedTrain) {
-                console.error("No train selected.");
-                return;
-            }
-
-            const requestData = {
-                trainId: trainId,
-                seats: bookedSeats.map(seat => parseInt(seat, 10))
-            };
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/updateBookedSeats`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(requestData),
-                });
-
-                const data = await response.json();
-                if (!response.ok || !data.success) {
-                    console.error("Failed to update booked seats:", data.message);
-                }
-            } catch (error) {
-                console.error("Error updating booked seats:", error);
-            }
-        }
-
-        function generateSeatLayout(totalSeats, bookedSeats) {
-            const seatsBox = document.getElementById("seats-box");
-            seatsBox.innerHTML = '';
-            trainSeats = Array(totalSeats).fill(false);
-
-            const columns = 4;
-            const rows = Math.ceil(totalSeats / columns);
-
-            for (let i = 0; i < rows; i++) {
-                const rowDiv = document.createElement("div");
-                rowDiv.classList.add("seat-row");
-
-                for (let j = 0; j < columns; j++) {
-                    const seatIndex = i * columns + j;
-                    if (seatIndex < totalSeats) {
-                        const seat = document.createElement("div");
-                        seat.classList.add("seat", getBerthType(seatIndex));
-                        seat.textContent = seatIndex + 1;
-
-                        if (bookedSeats.includes(seatIndex.toString())) {
-                            seat.classList.add("booked");
-                        } else {
-                            seat.onclick = () => toggleSeatSelection(seatIndex);
-                        }
-
-                        rowDiv.appendChild(seat);
-                    }
-                }
-
-                seatsBox.appendChild(rowDiv);
-            }
-        }
-
-        function getBerthType(seatNumber) {
-            const berthTypes = ["lower-berth", "middle-berth", "upper-berth", "side-lower-berth", "side-upper-berth"];
-            return berthTypes[seatNumber % berthTypes.length];
-        }
-
-        function toggleSeatSelection(seatIndex) {
-            trainSeats[seatIndex] = !trainSeats[seatIndex];
-            const seat = document.getElementById("seats-box").querySelectorAll(".seat")[seatIndex];
-
-            if (trainSeats[seatIndex]) {
-                seat.classList.add("selected");
+            if (bookedSeats.includes(seatIndex.toString())) {
+              seat.classList.add("booked");
             } else {
-                seat.classList.remove("selected");
+              seat.onclick = () => toggleSeatSelection(seatIndex);
             }
 
-            updateBookingSummary();
+            rowDiv.appendChild(seat);
+          }
         }
 
-        function generateRandomBookingId() {
-            const prefix = "BOOK";
-            const randomId = Math.random().toString(36).substr(2, 9).toUpperCase();
-            return `${prefix}-${randomId}`;
-        }
+        seatsBox.appendChild(rowDiv);
+      }
+    }
 
-        function updateBookingSummary() {
-            const selectedSeats = trainSeats.map((isSelected, index) => isSelected ? index + 1 : null).filter(Boolean);
-            const totalAmount = selectedSeats.length * selectedTrain.price;
-            const bookingId = generateRandomBookingId();
+    function getBerthType(seatNumber) {
+      const berthTypes = ["lower-berth", "middle-berth", "upper-berth", "side-lower-berth", "side-upper-berth"];
+      return berthTypes[seatNumber % berthTypes.length];
+    }
 
-            localStorage.setItem("selectedSeats", JSON.stringify(selectedSeats));
-            localStorage.setItem("totalAmount", totalAmount);
-            localStorage.setItem("bookingId", bookingId);
+    function toggleSeatSelection(seatIndex) {
+      trainSeats[seatIndex] = !trainSeats[seatIndex];
+      const seat = document.getElementById("seats-box").querySelectorAll(".seat")[seatIndex];
 
-            document.getElementById("selected-seats-list").textContent = selectedSeats.join(", ") || "None";
-            document.getElementById("total-amount").textContent = totalAmount;
-            document.getElementById("booking-id").textContent = bookingId;
-        }
+      if (trainSeats[seatIndex]) {
+        seat.classList.add("selected");
+      } else {
+        seat.classList.remove("selected");
+      }
 
-        function proceedToPayment() {
-            alert("Payment processed successfully!");
-            saveBooking();
+      updateBookingSummary();
+    }
 
-            const bookingId = document.getElementById("booking-id").textContent;
-            const totalAmount = document.getElementById("total-amount").textContent;
-            const selectedSeatsList = document.getElementById("selected-seats-list").textContent;
+    function generateRandomBookingId() {
+      const prefix = "BOOK";
+      const randomId = Math.random().toString(36).substr(2, 9).toUpperCase();
+      return `${prefix}-${randomId}`;
+    }
 
-            const bookingHistory = JSON.parse(localStorage.getItem("bookingHistory")) || [];
-            bookingHistory.push({ bookingId, seats: selectedSeatsList, totalAmount, date: new Date().toLocaleString() });
-            localStorage.setItem("bookingHistory", JSON.stringify(bookingHistory));
+    function updateBookingSummary() {
+      const selectedSeats = trainSeats.map((isSelected, index) => isSelected ? index + 1 : null).filter(Boolean);
+      const totalAmount = selectedSeats.length * selectedTrain.fare;
+      const bookingId = generateRandomBookingId();
 
-            setTimeout(() => window.location.href = "ticket.html", 500);
-        }
+      localStorage.setItem("selectedSeats", JSON.stringify(selectedSeats));
+      localStorage.setItem("totalAmount", totalAmount);
+      localStorage.setItem("bookingId", bookingId);
 
-        function displayBookingHistory() {
-            const historyBox = document.getElementById("booking-history");
-            const bookingHistory = JSON.parse(localStorage.getItem("bookingList")) || [];
+      document.getElementById("selected-seats-list").textContent = selectedSeats.join(", ") || "None";
+      document.getElementById("total-amount").textContent = totalAmount;
+      document.getElementById("booking-id").textContent = bookingId;
+    }
 
-            historyBox.innerHTML = "";
-            if (bookingHistory.length === 0) {
-                historyBox.innerHTML = "<p>No booking history available.</p>";
-                return;
-            }
+    function proceedToPayment() {
+      alert("Payment processed successfully!");
+      saveBooking();
 
-            bookingHistory.forEach((booking, index) => {
-                const bookingItem = document.createElement("div");
-                bookingItem.classList.add("booking-item");
-                bookingItem.innerHTML = `
-                    <p><strong>Booking ID:</strong> ${booking.bookingId}</p>
-                    <p><strong>Seats:</strong> ${booking.seats}</p>
-                    <p><strong>Total Amount:</strong> $${booking.amount}</p>
-                    <p><strong>Date:</strong> ${booking.date}</p>
-                    <button class="delete-booking" data-index="${index}">Delete</button>`;
-                bookingItem.querySelector(".delete-booking").addEventListener("click", () => deleteBooking(index));
-                historyBox.appendChild(bookingItem);
-            });
-        }
+      const bookingId = document.getElementById("booking-id").textContent;
+      const totalAmount = document.getElementById("total-amount").textContent;
+      const selectedSeatsList = document.getElementById("selected-seats-list").textContent;
 
-        function deleteBooking(index) {
-            const bookingHistory = JSON.parse(localStorage.getItem("bookingList")) || [];
-            bookingHistory.splice(index, 1);
-            localStorage.setItem("bookingList", JSON.stringify(bookingHistory));
-            displayBookingHistory();
-        }
+      const bookingHistory = JSON.parse(localStorage.getItem("bookingHistory")) || [];
+      bookingHistory.push({ bookingId, seats: selectedSeatsList, totalAmount, date: new Date().toLocaleString() });
+      localStorage.setItem("bookingHistory", JSON.stringify(bookingHistory));
 
-        function saveBooking() {
-            const bookedSeats = trainSeats.map((isSelected, index) => isSelected ? index : null).filter(Boolean);
-            const bookingId = document.getElementById("booking-id").textContent;
-            const totalAmount = document.getElementById("total-amount").textContent;
+      setTimeout(() => window.location.href = "ticket.html", 500);
+    }
 
-            const bookingList = JSON.parse(localStorage.getItem("bookingList")) || [];
-            bookingList.push({
-                train: selectedTrain.name,
-                seats: bookedSeats.join(", "),
-                amount: totalAmount,
-                bookingId,
-                date: new Date().toLocaleString()
-            });
-            localStorage.setItem("bookingList", JSON.stringify(bookingList));
+    function displayBookingHistory() {
+      const historyBox = document.getElementById("booking-history");
+      const bookingHistory = JSON.parse(localStorage.getItem("bookingList")) || [];
 
-            const trainBookings = JSON.parse(localStorage.getItem("trainBookings")) || {};
-            trainBookings[selectedTrain.name] = bookedSeats;
-            localStorage.setItem("trainBookings", JSON.stringify(trainBookings));
-        }
+      historyBox.innerHTML = "";
+      if (bookingHistory.length === 0) {
+        historyBox.innerHTML = "<p>No booking history available.</p>";
+        return;
+      }
 
-        function cancelBooking() {
-            const seatToCancel = parseInt(document.getElementById('cancel-seat').value, 10);
+      bookingHistory.forEach((booking, index) => {
+        const bookingItem = document.createElement("div");
+        bookingItem.classList.add("booking-item");
+        bookingItem.innerHTML = `
+          <p><strong>Booking ID:</strong> ${booking.bookingId}</p>
+          <p><strong>Seats:</strong> ${booking.seats}</p>
+          <p><strong>Total Amount:</strong> $${booking.amount}</p>
+          <p><strong>Date:</strong> ${booking.date}</p>
+          <button class="delete-booking" data-index="${index}">Delete</button>`;
+        bookingItem.querySelector(".delete-booking").addEventListener("click", () => deleteBooking(index));
+        historyBox.appendChild(bookingItem);
+      });
+    }
 
-            if (isNaN(seatToCancel) || seatToCancel < 1) {
-                alert('Please enter a valid seat number.');
-                return;
-            }
+    function deleteBooking(index) {
+      const bookingHistory = JSON.parse(localStorage.getItem("bookingList")) || [];
+      bookingHistory.splice(index, 1);
+      localStorage.setItem("bookingList", JSON.stringify(bookingHistory));
+      displayBookingHistory();
+    }
 
-            fetch(`${API_BASE_URL}/trainDetails`)
-                .then(response => response.json())
-                .then(data => {
-                    const bookedSeatsNumbers = data.bookedSeats.map(seat => parseInt(seat, 10));
-                    const bookingIndex = bookedSeatsNumbers.indexOf(seatToCancel);
+    function saveBooking() {
+      const bookedSeats = trainSeats.map((isSelected, index) => isSelected ? index : null).filter(Boolean);
+      const bookingId = document.getElementById("booking-id").textContent;
+      const totalAmount = document.getElementById("total-amount").textContent;
 
-                    if (bookingIndex === -1) {
-                        alert('This seat is not booked.');
-                        return;
-                    }
+      const bookingList = JSON.parse(localStorage.getItem("bookingList")) || [];
+      bookingList.push({
+        train: selectedTrain.trainName,
+        seats: bookedSeats.join(", "),
+        amount: totalAmount,
+        bookingId,
+        date: new Date().toLocaleString()
+      });
+      localStorage.setItem("bookingList", JSON.stringify(bookingList));
 
-                    data.bookedSeats.splice(bookingIndex, 1);
-                    updateBookedSeatsInDatabase(data._id, data.bookedSeats)
-                        .then(() => {
-                            alert(`Seat ${seatToCancel} has been canceled.`);
-                        })
-                        .catch(error => {
-                            console.error('Failed to update the booking:', error);
-                            alert('Error canceling the booking.');
-                        });
-                })
-                .catch(error => {
-                    console.error('Error fetching train data:', error);
-                    alert("Could not load train data.");
-                });
-        }
+      const trainBookings = JSON.parse(localStorage.getItem("trainBookings")) || {};
+      trainBookings[selectedTrain.trainName] = bookedSeats;
+      localStorage.setItem("trainBookings", JSON.stringify(trainBookings));
+    }
 
-        function fun1() {
-            const imgElement = document.getElementById("img");
-            imgElement.src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + encodeURIComponent('Hi');
-        }
-    </script>
+    function fun1() {
+      const imgElement = document.getElementById("img");
+      imgElement.src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + encodeURIComponent('Hi');
+    }
+  </script>
 </body>
