@@ -4,54 +4,269 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Greeny Ticket Booking - Seat Selection</title>
-    <link rel="icon" href="train1.png" type="png">
+    <link rel="icon" href=" train1.png" type="png">
     <link rel="stylesheet" href="styles.css" />
     <style>
-        /* ... your existing CSS ... */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { display: flex; flex-direction: column; min-height: 100vh; background-color: #f0f4f8; }
-        .container { display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        h1 { font-size: 2rem; font-weight: bold; color: #3b8b18; text-shadow: -1px 1px 2px #d9d9d9; margin-bottom: 20px; }
-        .train-search { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
-        .train-search input { padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px; width: 200px; }
-        .train-search button { background-color: #8b1818; color: white; padding: 10px 20px; font-size: 1rem; border: none; border-radius: 5px; cursor: pointer; }
-        .train-search button:hover { background-color: #2a9d8f; }
-        .train-list { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
-        .train-item { background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); cursor: pointer; transition: transform 0.2s; }
-        .train-item:hover { transform: scale(1.05); }
-        .seat-selection { display: flex; flex-direction: row; gap: 30px; max-width: 800px; width: 100%; margin-top: 20px; }
-        .booked{ background-color: #1e6827; color: white; }
-        .seats-box, .summary-box { background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-        .seat.booked { background-color: #ff4d4d; color: white; cursor: not-allowed; }
-        .seat:hover:not(.booked) { transform: scale(1.1); }
-        .seats-box { flex: 2; width: 100%; }
-        .seat-row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .seat { width: 50px; height: 50px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; transition: transform 0.2s; }
-        .lower-berth { background-color: #ff8b94; }
-        .middle-berth { background-color: #a8e6cf; }
-        .upper-berth { background-color: #ffd54f; }
-        .side-lower-berth { background-color: #9fa8da; }
-        .side-upper-berth { background-color: #d1c4e9; }
-        .seat:hover { transform: scale(1.1); }
-        .summary-box { flex: 1; text-align: center; }
-        .proceed-button { background-color: #3b8b18; color: white; padding: 15px 20px; font-size: 1rem; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; margin-top: 15px; width: 100%; transition: background-color 0.3s; }
-        .proceed-button:hover { background-color: #2a9d8f; }
-        .section-title { font-size: 1.8rem; color: #3b8b18; margin-top: 30px; text-align: center; }
-        .history-container, .admin-container { background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); max-width: 800px; margin: 20px auto; }
-        .booking-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #ccc; }
-        .cancel-button { background-color: #e57373; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; }
-        .cancel-button:hover { background-color: #ef5350; }
-        .generate-report-button { background-color: #3b8b18; color: white; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        .container{ height: 100%; }
-        .cancellation { margin-top: 20px; text-align: center; }
-        .cancellation input { padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px; margin-right: 10px; }
-        .cancellation button { background-color: #e57373; color: white; padding: 10px 20px; font-size: 1rem; border: none; border-radius: 5px; cursor: pointer; }
-        .cancellation button:hover { background-color: #ef5350; }
-        .entered-details { background: #e8f5e9; border-radius: 8px; padding: 12px 24px; margin-bottom: 18px; width: 100%; max-width: 450px; box-shadow: 0 2px 6px #e0e0e0; }
-        .entered-details ul { list-style: none; }
-        .entered-details li { margin-bottom: 4px; }
-        .summary-details { text-align: left; margin-top: 10px; margin-bottom: 10px; font-size: 1rem; }
-        .summary-details hr { margin: 6px 0; }
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f0f4f8;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Page Title */
+        h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3b8b18;
+            text-shadow: -1px 1px 2px #d9d9d9;
+            margin-bottom: 20px;
+        }
+
+        /* Train Search Form */
+        .train-search {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .train-search input {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        .train-search button {
+            background-color: #3b8b18;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .train-search button:hover {
+            background-color: #2a9d8f;
+        }
+
+        /* Train Selection */
+        .train-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .train-item {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .train-item:hover {
+            transform: scale(1.05);
+        }
+
+        /* Seat Selection Layout */
+        .seat-selection {
+            display: flex;
+            flex-direction: row;
+            gap: 30px;
+            max-width: 800px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .booked{
+        background-color: #1e6827; /* Selected Seat color */
+        color: white;
+    }
+
+        .seats-box, .summary-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .seat.booked {
+        background-color: #ff4d4d; /* Red for booked seats */
+        color: white;
+        cursor: not-allowed;
+    }
+    .seat:hover:not(.booked) {
+        transform: scale(1.1);
+    }
+
+        .seats-box {
+            flex: 2;
+            width: 100%;
+            
+        }
+
+        .seat-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .seat {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .lower-berth {
+            background-color: #ff8b94;
+        }
+
+        .middle-berth {
+            background-color: #a8e6cf;
+        }
+
+        .upper-berth {
+            background-color: #ffd54f;
+        }
+
+        .side-lower-berth {
+            background-color: #9fa8da;
+        }
+
+        .side-upper-berth {
+            background-color: #d1c4e9;
+        }
+
+        .seat:hover {
+            transform: scale(1.1);
+        }
+
+        .summary-box {
+            flex: 1;
+            text-align: center;
+        }
+
+        .proceed-button {
+            background-color: #3b8b18;
+            color: white;
+            padding: 15px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .proceed-button:hover {
+            background-color: #2a9d8f;
+        }
+
+        /* Additional Styles for New Sections */
+        .section-title {
+            font-size: 1.8rem;
+            color: #3b8b18;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .history-container, .admin-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .booking-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .cancel-button {
+            background-color: #e57373;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cancel-button:hover {
+            background-color: #ef5350;
+        }
+
+        .generate-report-button {
+            background-color: #3b8b18;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .container{
+            height: 100%;
+        }
+
+        /* Cancellation Section */
+        .cancellation {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .cancellation input {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .cancellation button {
+            background-color: #e57373;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cancellation button:hover {
+            background-color: #ef5350;
+        }
     </style>
 </head>
 <body>
@@ -65,34 +280,14 @@
             <label for="date" style="display:none;">Travel Date</label>
             <input type="date" id="date" title="Select travel date" placeholder="Select date" />
             <button onclick="searchTrains()">Search Trains</button>
-            <button onclick="fetchAllTrains()" style="background:#3b8b18;margin-left:10px;">Show All Trains</button>
         </div>
 
-        <!-- Display entered details -->
-        <div id="entered-details" class="entered-details" style="display:none;">
-            <h3>Your Search:</h3>
-            <ul>
-                <li><b>From:</b> <span id="detail-from"></span></li>
-                <li><b>To:</b> <span id="detail-to"></span></li>
-                <li><b>Date:</b> <span id="detail-date"></span></li>
-            </ul>
-        </div>
-
-        <!-- Train List (Dynamically populated after search) -->
         <div class="train-list" id="train-list"></div>
 
         <div class="seat-selection" id="seat-selection" style="display: none;">
             <div class="seats-box" id="seats-box"></div>
             <div class="summary-box">
                 <h2>Booking Summary</h2>
-                <div class="summary-details">
-                    <hr>
-                    <b>From:</b> <span id="summary-from"></span><br>
-                    <b>To:</b> <span id="summary-to"></span><br>
-                    <b>Date:</b> <span id="summary-date"></span><br>
-                    <b>Train:</b> <span id="summary-train"></span><br>
-                    <hr>
-                </div>
                 <p>Selected Seats: <span id="selected-seats-list">None</span></p>
                 <p>Total Amount: $<span id="total-amount">0</span></p>
                 <p>Booking ID: <span id="booking-id">None</span></p>
@@ -103,7 +298,7 @@
                 <button class="proceed-button" onclick="proceedToPayment()">Proceed with Payment</button>
             </div>
         </div>
-     
+
         <h2 class="section-title">Booking History and Details</h2>
         <div class="history-container" id="booking-history">
             <button onclick="displayBookingHistory()">View Booking History</button>
@@ -118,54 +313,22 @@
     </div>
 
     <script>
+        const API_BASE_URL = "http://ec2-35-154-239-29.ap-south-1.compute.amazonaws.com:3003/api";
         let selectedTrain = null;
         let trainSeats = [];
+
         const userEmail = localStorage.getItem("userEmail");
-
-        // Show entered details on the page
-        function showEnteredDetails(from, to, date) {
-            document.getElementById("entered-details").style.display = "block";
-            document.getElementById("detail-from").textContent = from;
-            document.getElementById("detail-to").textContent = to;
-            document.getElementById("detail-date").textContent = date;
-        }
-        // Show details in summary box when train is selected
-        function showSummaryDetails(from, to, date, train) {
-            document.getElementById("summary-from").textContent = from;
-            document.getElementById("summary-to").textContent = to;
-            document.getElementById("summary-date").textContent = date;
-            document.getElementById("summary-train").textContent = train;
-        }
-
-        // Show all trains on load
-        window.onload = function() {
-            fetchAllTrains();
-        };
-        function fetchAllTrains() {
-            document.getElementById("entered-details").style.display = "none";
-            fetch('http://ec2-13-204-68-165.ap-south-1.compute.amazonaws.com:3003/api/allTrains')
-                .then(response => response.json())
-                .then(data => {
-                    if (Array.isArray(data) && data.length > 0) {
-                        displayTrains(data);
-                    } else {
-                        document.getElementById("train-list").innerHTML = "<p>No trains found.</p>";
-                    }
-                })
-                .catch(error => {
-                    console.error("Error fetching all trains:", error);
-                    document.getElementById("train-list").innerHTML = "<p>Error fetching train data.</p>";
-                });
-        }
 
         function searchTrains() {
             const from = document.getElementById("from").value;
             const to = document.getElementById("to").value;
             const date = document.getElementById("date").value;
+
             if (!from || !to || !date) {
                 alert("Please fill in all fields.");
                 return;
             }
+
             const today = new Date();
             today.setHours(0, 0, 0, 0);
             const selectedDate = new Date(date);
@@ -173,30 +336,30 @@
                 alert("Please select a present or future date.");
                 return;
             }
+
             localStorage.setItem("fromStation", from);
             localStorage.setItem("toStation", to);
             localStorage.setItem("travelDate", date);
 
-            showEnteredDetails(from, to, date);
-
-            fetch(`http://ec2-13-204-68-165.ap-south-1.compute.amazonaws.com:3003/api/searchTrains?from=${from}&to=${to}&date=${date}`)
+            fetch(`${API_BASE_URL}/searchTrains?from=${from}&to=${to}&date=${date}`)
                 .then(response => response.json())
                 .then(data => {
                     if (Array.isArray(data) && data.length > 0) {
                         displayTrains(data);
                     } else {
-                        document.getElementById("train-list").innerHTML = "<p>No trains found for the given route.</p>";
+                        alert("No trains found for the given route.");
                     }
                 })
                 .catch(error => {
                     console.error("Error fetching train data:", error);
-                    document.getElementById("train-list").innerHTML = "<p>Error fetching train data.</p>";
+                    alert("Something went wrong while fetching the train data.");
                 });
         }
 
         function displayTrains(trains) {
             const trainList = document.getElementById("train-list");
             trainList.innerHTML = '';
+
             trains.forEach(train => {
                 const trainItem = document.createElement("div");
                 trainItem.classList.add("train-item");
@@ -210,11 +373,16 @@
             selectedTrain = train;
             document.getElementById("seat-selection").style.display = "flex";
             generateSeatLayout(train.availableSeats, train.bookedSeats || []);
-            if (!train.bookedSeats) train.bookedSeats = [];
+
+            if (!train.bookedSeats) {
+                train.bookedSeats = [];
+            }
+
             document.querySelectorAll(".seat").forEach((seatElement, index) => {
                 seatElement.addEventListener("click", function () {
                     const seatIndex = index.toString();
                     const isAlreadyBooked = train.bookedSeats.includes(seatIndex);
+
                     if (!isAlreadyBooked) {
                         train.bookedSeats.push(seatIndex);
                         seatElement.classList.add("booked");
@@ -222,29 +390,36 @@
                         train.bookedSeats = train.bookedSeats.filter(seat => seat !== seatIndex);
                         seatElement.classList.remove("booked");
                     }
+
                     updateBookedSeatsInDatabase(selectedTrain._id, train.bookedSeats);
                 });
             });
 
-            const from = localStorage.getItem("fromStation");
-            const to = localStorage.getItem("toStation");
-            const date = localStorage.getItem("travelDate");
-            showSummaryDetails(from, to, date, train.name);
             localStorage.setItem("trainTime", train.timing);
         }
 
         async function updateBookedSeatsInDatabase(trainId, bookedSeats) {
-            if (!selectedTrain) return;
+            if (!selectedTrain) {
+                console.error("No train selected.");
+                return;
+            }
+
             const requestData = {
                 trainId: trainId,
-                seats: bookedSeats.map(seat => parseInt(seat, 10)),
+                seats: bookedSeats.map(seat => parseInt(seat, 10))
             };
+
             try {
-                await fetch(`http://ec2-13-204-68-165.ap-south-1.compute.amazonaws.com:3003/api/updateBookedSeats`, {
+                const response = await fetch(`${API_BASE_URL}/updateBookedSeats`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(requestData),
                 });
+
+                const data = await response.json();
+                if (!response.ok || !data.success) {
+                    console.error("Failed to update booked seats:", data.message);
+                }
             } catch (error) {
                 console.error("Error updating booked seats:", error);
             }
@@ -254,33 +429,33 @@
             const seatsBox = document.getElementById("seats-box");
             seatsBox.innerHTML = '';
             trainSeats = Array(totalSeats).fill(false);
+
             const columns = 4;
             const rows = Math.ceil(totalSeats / columns);
+
             for (let i = 0; i < rows; i++) {
                 const rowDiv = document.createElement("div");
                 rowDiv.classList.add("seat-row");
+
                 for (let j = 0; j < columns; j++) {
                     const seatIndex = i * columns + j;
                     if (seatIndex < totalSeats) {
                         const seat = document.createElement("div");
                         seat.classList.add("seat", getBerthType(seatIndex));
                         seat.textContent = seatIndex + 1;
+
                         if (bookedSeats.includes(seatIndex.toString())) {
                             seat.classList.add("booked");
                         } else {
                             seat.onclick = () => toggleSeatSelection(seatIndex);
                         }
+
                         rowDiv.appendChild(seat);
                     }
                 }
+
                 seatsBox.appendChild(rowDiv);
             }
-        }
-
-        function generateRandomBookingId() {
-            const prefix = "BOOK";
-            const randomId = Math.random().toString(36).substr(2, 9).toUpperCase();
-            return `${prefix}-${randomId}`;
         }
 
         function getBerthType(seatNumber) {
@@ -291,26 +466,32 @@
         function toggleSeatSelection(seatIndex) {
             trainSeats[seatIndex] = !trainSeats[seatIndex];
             const seat = document.getElementById("seats-box").querySelectorAll(".seat")[seatIndex];
+
             if (trainSeats[seatIndex]) {
                 seat.classList.add("selected");
             } else {
                 seat.classList.remove("selected");
             }
+
             updateBookingSummary();
         }
 
+        function generateRandomBookingId() {
+            const prefix = "BOOK";
+            const randomId = Math.random().toString(36).substr(2, 9).toUpperCase();
+            return `${prefix}-${randomId}`;
+        }
+
         function updateBookingSummary() {
-            const selectedSeats = trainSeats
-                .map((isSelected, index) => (isSelected ? index + 1 : null))
-                .filter(seat => seat !== null);
-            const pricePerSeat = selectedTrain.price;
-            const totalAmount = selectedSeats.length * pricePerSeat;
+            const selectedSeats = trainSeats.map((isSelected, index) => isSelected ? index + 1 : null).filter(Boolean);
+            const totalAmount = selectedSeats.length * selectedTrain.price;
             const bookingId = generateRandomBookingId();
+
             localStorage.setItem("selectedSeats", JSON.stringify(selectedSeats));
             localStorage.setItem("totalAmount", totalAmount);
             localStorage.setItem("bookingId", bookingId);
-            document.getElementById("selected-seats-list").textContent =
-                selectedSeats.join(", ") || "None";
+
+            document.getElementById("selected-seats-list").textContent = selectedSeats.join(", ") || "None";
             document.getElementById("total-amount").textContent = totalAmount;
             document.getElementById("booking-id").textContent = bookingId;
         }
@@ -318,30 +499,29 @@
         function proceedToPayment() {
             alert("Payment processed successfully!");
             saveBooking();
+
             const bookingId = document.getElementById("booking-id").textContent;
             const totalAmount = document.getElementById("total-amount").textContent;
             const selectedSeatsList = document.getElementById("selected-seats-list").textContent;
+
             const bookingHistory = JSON.parse(localStorage.getItem("bookingHistory")) || [];
-            const newBooking = {
-                bookingId,
-                seats: selectedSeatsList,
-                totalAmount,
-                date: new Date().toLocaleString()
-            };
-            bookingHistory.push(newBooking);
+            bookingHistory.push({ bookingId, seats: selectedSeatsList, totalAmount, date: new Date().toLocaleString() });
             localStorage.setItem("bookingHistory", JSON.stringify(bookingHistory));
-            setTimeout(() => window.location.href = "ticket.html", 500); 
+
+            setTimeout(() => window.location.href = "ticket.html", 500);
         }
 
         function displayBookingHistory() {
             const historyBox = document.getElementById("booking-history");
             const bookingHistory = JSON.parse(localStorage.getItem("bookingList")) || [];
+
             historyBox.innerHTML = "";
             if (bookingHistory.length === 0) {
                 historyBox.innerHTML = "<p>No booking history available.</p>";
                 return;
             }
-            bookingHistory.forEach((booking,index) => {
+
+            bookingHistory.forEach((booking, index) => {
                 const bookingItem = document.createElement("div");
                 bookingItem.classList.add("booking-item");
                 bookingItem.innerHTML = `
@@ -349,10 +529,9 @@
                     <p><strong>Seats:</strong> ${booking.seats}</p>
                     <p><strong>Total Amount:</strong> $${booking.amount}</p>
                     <p><strong>Date:</strong> ${booking.date}</p>
-                     <button class="delete-booking" data-index="${index}">Delete</button>`;
+                    <button class="delete-booking" data-index="${index}">Delete</button>`;
+                bookingItem.querySelector(".delete-booking").addEventListener("click", () => deleteBooking(index));
                 historyBox.appendChild(bookingItem);
-                const deleteButton = bookingItem.querySelector(".delete-booking");
-                deleteButton.addEventListener("click", () => deleteBooking(index));
             });
         }
 
@@ -364,24 +543,58 @@
         }
 
         function saveBooking() {
-            const bookedSeats = trainSeats
-                .map((isSelected, index) => (isSelected ? index : null))
-                .filter(seat => seat !== null);
+            const bookedSeats = trainSeats.map((isSelected, index) => isSelected ? index : null).filter(Boolean);
             const bookingId = document.getElementById("booking-id").textContent;
             const totalAmount = document.getElementById("total-amount").textContent;
-            const selectedSeatsList = bookedSeats.join(", ");
+
             const bookingList = JSON.parse(localStorage.getItem("bookingList")) || [];
             bookingList.push({
                 train: selectedTrain.name,
-                seats: selectedSeatsList,
+                seats: bookedSeats.join(", "),
                 amount: totalAmount,
-                bookingId: bookingId,
+                bookingId,
                 date: new Date().toLocaleString()
             });
             localStorage.setItem("bookingList", JSON.stringify(bookingList));
+
             const trainBookings = JSON.parse(localStorage.getItem("trainBookings")) || {};
             trainBookings[selectedTrain.name] = bookedSeats;
             localStorage.setItem("trainBookings", JSON.stringify(trainBookings));
+        }
+
+        function cancelBooking() {
+            const seatToCancel = parseInt(document.getElementById('cancel-seat').value, 10);
+
+            if (isNaN(seatToCancel) || seatToCancel < 1) {
+                alert('Please enter a valid seat number.');
+                return;
+            }
+
+            fetch(`${API_BASE_URL}/trainDetails`)
+                .then(response => response.json())
+                .then(data => {
+                    const bookedSeatsNumbers = data.bookedSeats.map(seat => parseInt(seat, 10));
+                    const bookingIndex = bookedSeatsNumbers.indexOf(seatToCancel);
+
+                    if (bookingIndex === -1) {
+                        alert('This seat is not booked.');
+                        return;
+                    }
+
+                    data.bookedSeats.splice(bookingIndex, 1);
+                    updateBookedSeatsInDatabase(data._id, data.bookedSeats)
+                        .then(() => {
+                            alert(`Seat ${seatToCancel} has been canceled.`);
+                        })
+                        .catch(error => {
+                            console.error('Failed to update the booking:', error);
+                            alert('Error canceling the booking.');
+                        });
+                })
+                .catch(error => {
+                    console.error('Error fetching train data:', error);
+                    alert("Could not load train data.");
+                });
         }
 
         function fun1() {
@@ -390,4 +603,3 @@
         }
     </script>
 </body>
-</html>
