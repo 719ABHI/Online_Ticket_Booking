@@ -192,10 +192,11 @@ function sendEmail() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert("Email sent successfully!");
-        } else {
-            alert("Failed to send email. Please try again later.");
-        }
+            alert("Ticket generated successfully!");
+         } 
+        // else {
+        //     alert("Failed to send email. Please try again later.");
+        // }
     })
     .catch(error => {
         console.error("Error sending email:", error);
